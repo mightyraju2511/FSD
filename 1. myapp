@@ -1,0 +1,124 @@
+1.3 - 1.4 Create a Django app 
+1. In the VS Code Terminal with your virtual environment activated, run the administrative utility's 
+startapp command in your project folder (where manage.py resides): 
+python manage.py startapp myapp
+The command creates a folder called myapp that contains a number of code files and one subfolder. Of 
+these, you frequently work with views.py (that contains the functions that define pages in your web app) 
+and models.py (that contains classes defining your data objects). The migrations folder is used by Django's 
+administrative utility to manage database versions as discussed later in this tutorial. There are also the files 
+apps.py (app configuration), admin.py (for creating an administrative interface), and tests.py (for creating 
+tests), which are not covered here.
+
+2. Modify myapp/views.py to match the following code 
+#views.py 
+import pytz 
+from datetime import datetime, timedelta 
+from django.shortcuts import render 
+#Using pytz library 
+def current_datetime(request): 
+# Get the standard UTC time 
+utc = pytz.utc 
+# Get the time zone of the specified location (IST - Indian Standard Time) 
+ist = pytz.timezone('Asia/Kolkata') 
+# Get the current time in UTC and IST 
+datetime_utc = datetime.now(utc) 
+datetime_ist = datetime.now(ist) 
+# Format the date and time 
+formatted_utc = datetime_utc.strftime('%Y-%m-%d %H:%M:%S %Z %z') 
+formatted_ist = datetime_ist.strftime('%Y-%m-%d %H:%M:%S %Z %z') 
+# Pass the formatted date and time to the template 
+context = { 
+'utc_time': formatted_utc, 
+'ist_time': formatted_ist 
+} 
+# Render the template with the context 
+return render(request, 'myapp/current_datetime.html', context)
+#Using pytz library 
+def date_time_offset(request): 
+# Get the current date and time on the server 
+current_datetime = datetime.now() 
+# Calculate the date and time four hours ahead and four hours before 
+datetime_ahead = current_datetime + timedelta(hours=4) 
+datetime_before = current_datetime - timedelta(hours=4) 
+# Format the date and time strings 
+formatted_current_datetime = current_datetime.strftime('%Y-%m-%d %H:%M:%S') 
+formatted_datetime_ahead = datetime_ahead.strftime('%Y-%m-%d %H:%M:%S') 
+formatted_datetime_before = datetime_before.strftime('%Y-%m-%d %H:%M:%S') 
+# Pass the formatted date and time strings to the template 
+context = { 
+'current_datetime': formatted_current_datetime, 
+'datetime_ahead': formatted_datetime_ahead, 
+'datetime_before': formatted_datetime_before 
+} 
+# Render the template with the context 
+return render(request, 'myapp/date_time_offset.html', context)
+3.You need to install the pytz library. 
+pip install pytz
+4.Create a file, myapp/urls.py, with the contents below. The urls.py file is where you specify patterns to 
+route different URLs to their appropriate views. 
+#urls.py (myapp/urls.py) 
+from django.urls import path 
+from myapp import views 
+urlpatterns = [ 
+path("current_datetime/", views.current_datetime, name="current_datetime"), 
+path("date_time_offset/", views.date_time_offset, name="date_time_offset"),
+]
+5. The myproject folder also contains a urls.py file, which is where URL routing is actually handled. 
+Open myproject/urls.py and modify it to match the following code (you can retain the instructive 
+comments if you like). This code pulls in the app's myapp/urls.py using django.urls.include, which 
+keeps the app's routes contained within the app. This separation is helpful when a project contains 
+multiple apps. 
+#urls.py (myproject/urls.py) 
+from django.contrib import admin 
+from django.urls import path, include 
+urlpatterns = [ 
+path("", include("myapp.urls")), 
+path("admin/", admin.site.urls), 
+]
+
+6. In the myproject/settings.py file, locate the INSTALLED_APPS list and add the following entry, 
+which makes sure the project knows about the app so it can handle templating: 
+ ‘myapp’.
+7. Inside the myapp folder, create a folder named templates, and then another subfolder named 
+myapp to match the app name (this two-tiered folder structure is typical Django convention). 
+ 
+In the templates/myapp folder, create a file named current_datetime.html with the contents below. 
+#current_datetime.html (myapp/templates/myapp/current_datetime.html)
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Current Time</title> 
+</head> 
+<body> 
+<h1>Current Time</h1> 
+<p>UTC Time: {{ utc_time }}</p> 
+<p>Indian Standard Time (IST): {{ ist_time }}</p> 
+</body> 
+</html>
+
+In the templates/myapp folder, create a file named date_time_offset.html with the contents below.
+#date_time_offset.html (myapp/templates/myapp/ date_time_offset.html) 
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Date and Time Offset</title> 
+</head> 
+<body> 
+<h1>Date and Time Offset</h1> 
+<p>Current Date and Time: {{ current_datetime }}</p> 
+<p>Date and Time Four Hours Ahead: {{ datetime_ahead }}</p> 
+<p>Date and Time Four Hours Before: {{ datetime_before }}</p> 
+</body> 
+</html>
+8. Save all modified files.
+9. In the VS Code Terminal, again with the virtual environment activated, run the development 
+server with python manage.py runserver and open a browser to http://127.0.0.1:8000/ 
+10.In the url box of the browse, navigate to http://127.0.0.1:8000/current_datetime to view the current 
+date time. Similarly, navigate to http://127.0.0.1:8000/date_time_offset to view the offset time.
+
+
+
