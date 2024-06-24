@@ -2,16 +2,17 @@
 startapp command in your myproject folder (where manage.py resides): 
  
 2. Modify website_pages/views.py to match the following code. 
-#views.py 
-from django.shortcuts import render 
-def home(request): 
-return render(request, 'website_pages/home.html') 
-def about_us(request): 
-return render(request, 'website_pages/about_us.html') 
-def contact_us(request): 
-return render(request, 'website_pages/contact_us.html')
-3. Create a file, website_pages/urls.py, with the contents below. The urls.py file is where you specify 
-patterns to route different URLs to their appropriate views. 
+# views.py
+from django.shortcuts import render
+def home(request):
+    return render(request, 'website_pages/home.html')
+def about_us(request):
+    return render(request, 'website_pages/about_us.html')
+def contact_us(request):
+    return render(request, 'website_pages/contact_us.html')
+
+3. Create a file, website_pages/urls.py, 
+
 #urls.py (website_pages /urls.py) 
 from django.urls import path 
 from website_pages import views 
@@ -20,7 +21,9 @@ path('home/', views.home, name='home'),
 path('about_us/', views.about_us, name='about_us'), 
 path('contact_us/', views.contact_us, name='contact_us'), 
 ]
-4. The myproject folder also contains a urls.py file, which is where URL routing is actually handled. 
+
+4. The myproject folder also contains a urls.py file, 
+
 #urls.py (myproject/urls.py)
 from django.contrib import admin 
 from django.urls import path, include 
@@ -30,9 +33,10 @@ path("admin/", admin.site.urls),
 path('fruits_and_students/', include('fruits_and_students.urls')), 
 path('', include('website_pages.urls')), 
 ]
-5. In the myproject/settings.py file, locate the INSTALLED_APPS list and add the following entry, 
-which makes sure the project knows about the app so it can handle templating: 
+
+5. In the myproject/settings.py file, locate the INSTALLED_APPS list 
 ‘website_pages’.
+
 6. Inside the website_pages folder, create a folder named templates. Inside the templates folder, 
 create a file named layout.html. 
 #templates/layout.html (The CSS is optional)
@@ -99,10 +103,11 @@ width: 100%;
 </footer>
 </body> 
 </html>
-7. Inside the templates folder, create another subfolder named website_pages to match the app name (this 
-two-tiered folder structure is typical Django convention). 
+
+7. Inside the templates folder, create another subfolder named website_pages to match the app namE
 In the templates/website_pages folder, create files named home.html, about_us.html, and contact_us.html 
 with the contents below.
+
 #home.html (website_pages/templates/website_pages/home.html) 
 {% extends 'layout.html' %} 
 {% block title %}Home{% endblock %} 
@@ -122,6 +127,7 @@ specialized master's programs and embrace leadership in technology.</li>
 <p>Benefit from our strong industry ties and placement programs that open doors to exciting 
 career opportunities.</p> 
 {% endblock %}
+
 #about_us.html (website_pages/templates/website_pages/about_us.html) 
 {% extends 'layout.html' %} 
 {% block title %}About Us{% endblock %} 
@@ -136,6 +142,7 @@ mission is to nurture innovative thinkers who will shape the future of technolog
 <p>Experience a dynamic campus life enriched with cultural activities, technical clubs, and 
 community service initiatives that foster holistic development.</p> 
 {% endblock %}
+
 #contact_us.html (website_pages/templates/website_pages/contact_us.html) 
 {% extends 'layout.html' %} 
 {% block title %}Contact Us{% endblock %} 
@@ -152,9 +159,12 @@ community service initiatives that foster holistic development.</p>
 <p>We welcome you to be a part of our thriving community that's dedicated to creating a better 
 tomorrow through technology and innovation.</p> 
 {% endblock %}
+
 8. Save all modified files. 
+
 9. In the VS Code Terminal, again with the virtual environment activated, run the development server with 
 python manage.py runserver and open a browser to http://127.0.0.1:8000/ 
+
 10.In the url box of the browse, navigate to http://127.0.0.1:8000/home to view the output. Similarly, you 
 can navigate through by clicking on the navigation menu. Also check out http://127.0.0.1:8000/about_us 
 and http://127.0.0.1:8000/contact_us 
