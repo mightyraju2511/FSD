@@ -1,6 +1,6 @@
-1. In the VS Code Terminal with your virtual environment activated, run the administrative utility's 
-startapp command in your myproject folder (where manage.py resides): 
+1. In the VS Code Terminal with your virtual environment activated, 
 python manage.py startapp fruits_and_students
+
 2. Modify fruits_and_students/views.py to match the following code. 
 #views.py 
 from django.shortcuts import render 
@@ -10,18 +10,18 @@ fruits = ['Apple', 'Banana', 'Orange', 'Grapes']
 students = ['Alice', 'Bob', 'Charlie', 'David'] 
 return render(request, 'fruits_and_students/fruits_and_students.html', {'fruits': fruits, 
 'students': students})
-3. Create a file, fruits_and_students/urls.py, with the contents below. The urls.py file is where you specify 
-patterns to route different URLs to their appropriate views. 
+
+3. Create a file, fruits_and_students/urls.py, with the contents below. 
+
 #urls.py (fruits_and_students/urls.py) 
 from django.urls import path 
 from .views import fruits_and_students 
 urlpatterns = [ 
 path('', fruits_and_students, name='fruits_and_students'), 
 ]
-4. The myproject folder also contains a urls.py file, which is where URL routing is actually handled. Keep 
-in mind the myproject/urls.py will be used to handle all of the laboratory component apps’ that will be 
-built. Just add the path url routing line of code to the urlpatterns list every time in the already existing 
-code. 
+
+4. The myproject folder also contains a urls.py file,
+
 #urls.py (myproject/urls.py) 
 from django.contrib import admin 
 from django.urls import path, include 
@@ -30,13 +30,14 @@ path("", include("myapp.urls")),
 path("admin/", admin.site.urls), 
 path('fruits_and_students/', include('fruits_and_students.urls')), 
 ]
-5. In the myproject/settings.py file, locate the INSTALLED_APPS list and add the following entry, which 
-makes sure the project knows about the app so it can handle templating: 
+
+5. In the myproject/settings.py file, locate the INSTALLED_APPS list  
 ‘fruits_and_students’.
 6. Inside the fruits_and_students folder, create a folder named templates, and then another subfolder named 
-fruits_and_students to match the app name (this two-tiered folder structure is typical Django convention). 
+fruits_and_students . 
 In the templates/fruits_and_students folder, create a file named fruits_and_students.html with the 
 contents below.
+
 #fruits_and_students.html (fruits_and_students/templates/fruits_and_students/ 
 fruits_and_students.html)
 <!DOCTYPE html> 
@@ -61,7 +62,9 @@ fruits_and_students.html)
 </ol> 
 </body> 
 </html>
+
 7. Save all modified files. 
+
 8. In the VS Code Terminal, again with the virtual environment activated, run the development 
 server with python manage.py runserver and open a browser to http://127.0.0.1:8000/
 9. In the url box of the browse, navigate to http://127.0.0.1:8000/fruits_and_students to view the 
