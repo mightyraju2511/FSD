@@ -1,0 +1,163 @@
+1. In the VS Code Terminal with your virtual environment activated, run the administrative utility's 
+startapp command in your myproject folder (where manage.py resides): 
+ 
+2. Modify website_pages/views.py to match the following code. 
+#views.py 
+from django.shortcuts import render 
+def home(request): 
+return render(request, 'website_pages/home.html') 
+def about_us(request): 
+return render(request, 'website_pages/about_us.html') 
+def contact_us(request): 
+return render(request, 'website_pages/contact_us.html')
+3. Create a file, website_pages/urls.py, with the contents below. The urls.py file is where you specify 
+patterns to route different URLs to their appropriate views. 
+#urls.py (website_pages /urls.py) 
+from django.urls import path 
+from website_pages import views 
+urlpatterns = [ 
+path('home/', views.home, name='home'), 
+path('about_us/', views.about_us, name='about_us'), 
+path('contact_us/', views.contact_us, name='contact_us'), 
+]
+4. The myproject folder also contains a urls.py file, which is where URL routing is actually handled. 
+#urls.py (myproject/urls.py)
+from django.contrib import admin 
+from django.urls import path, include 
+urlpatterns = [ 
+path("", include("myapp.urls")), 
+path("admin/", admin.site.urls), 
+path('fruits_and_students/', include('fruits_and_students.urls')), 
+path('', include('website_pages.urls')), 
+]
+5. In the myproject/settings.py file, locate the INSTALLED_APPS list and add the following entry, 
+which makes sure the project knows about the app so it can handle templating: 
+‘website_pages’.
+6. Inside the website_pages folder, create a folder named templates. Inside the templates folder, 
+create a file named layout.html. 
+#templates/layout.html (The CSS is optional)
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>{% block title %}My Website{% endblock %}</title> 
+<style>
+body { 
+font-family: Arial, sans-serif; 
+margin: 0; 
+padding: 0; 
+}
+header { 
+background-color: #333; 
+color: #fff; 
+padding: 10px; 
+}
+nav ul { 
+list-style-type: none;
+padding: 0; 
+}
+nav ul li { 
+display: inline; 
+margin-right: 20px; 
+} 
+nav ul li a { 
+text-decoration: none; 
+color: #fff; 
+}
+main { 
+padding: 20px; 
+}
+footer { 
+background-color: #333; 
+color: #fff; 
+text-align: center; 
+padding: 10px; 
+position: fixed; 
+bottom: 0; 
+width: 100%;
+} 
+</style> 
+</head>
+<body> 
+<header> 
+<nav> 
+<ul> 
+<li><a href="{% url 'home' %}">Home</a></li> 
+<li><a href="{% url 'about_us' %}">About Us</a></li> 
+<li><a href="{% url 'contact_us' %}">Contact Us</a></li> 
+</ul> 
+</nav> 
+</header>
+<main> 
+{% block content %} 
+{% endblock %} 
+</main>
+<footer> 
+<p>&copy; 2024 My Website. All rights reserved. </p> 
+<p>Developed by EPCET</p> 
+</footer>
+</body> 
+</html>
+7. Inside the templates folder, create another subfolder named website_pages to match the app name (this 
+two-tiered folder structure is typical Django convention). 
+In the templates/website_pages folder, create files named home.html, about_us.html, and contact_us.html 
+with the contents below.
+#home.html (website_pages/templates/website_pages/home.html) 
+{% extends 'layout.html' %} 
+{% block title %}Home{% endblock %} 
+{% block content %} 
+<h1>Welcome to East Point College of Engineering and Technology <h1> 
+<p>Empowering students with a blend of knowledge and innovation. </p> 
+<p>Nestled in the bustling city of Bengaluru, our campus is a hub of academic excellence and 
+cutting-edge research.</p> 
+<h2>Discover Your Potential</h2> 
+<ul> 
+<li><strong>Undergraduate Programs:</strong> Dive into our diverse range of engineering 
+courses designed to fuel your passion and drive innovation.</li> 
+<li><strong>Postgraduate Programs:</strong> Advance your expertise with our 
+specialized master's programs and embrace leadership in technology.</li> 
+</ul> 
+<p>Join our vibrant community where ideas flourish and inventions come to life in our state-ofthe-art labs and research centers.</p> 
+<p>Benefit from our strong industry ties and placement programs that open doors to exciting 
+career opportunities.</p> 
+{% endblock %}
+#about_us.html (website_pages/templates/website_pages/about_us.html) 
+{% extends 'layout.html' %} 
+{% block title %}About Us{% endblock %} 
+{% block content %} 
+<h1>Our Legacy</h1> 
+<p>Founded on the principles of quality education and societal contribution, we've been at the 
+forefront of technological education for over four decades.</p> 
+<h1>Vision and Mission</h1> 
+<p>Our vision is to be a beacon of knowledge that lights the way for aspiring minds, and our 
+mission is to nurture innovative thinkers who will shape the future of technology.</p> 
+<h1>Campus Life</h1> 
+<p>Experience a dynamic campus life enriched with cultural activities, technical clubs, and 
+community service initiatives that foster holistic development.</p> 
+{% endblock %}
+#contact_us.html (website_pages/templates/website_pages/contact_us.html) 
+{% extends 'layout.html' %} 
+{% block title %}Contact Us{% endblock %} 
+{% block content %} 
+<h1>Get in Touch</h1> 
+<p>For admissions and inquiries, reach out to us at:</p> 
+<ul> 
+<li><strong>Email:</strong> admissions@eastpoint.ac.in</li> 
+<li><strong>Phone:</strong> +91- 72042 29999</li> 
+</ul>
+<h1>Visit Our Campus</h1> 
+<p>Jnana Prabha, East Point Campus, </p> 
+<p> Virgo Nagar Post, Avalahalli, Bengaluru, Karnataka 560049</p> 
+<p>We welcome you to be a part of our thriving community that's dedicated to creating a better 
+tomorrow through technology and innovation.</p> 
+{% endblock %}
+8. Save all modified files. 
+9. In the VS Code Terminal, again with the virtual environment activated, run the development server with 
+python manage.py runserver and open a browser to http://127.0.0.1:8000/ 
+10.In the url box of the browse, navigate to http://127.0.0.1:8000/home to view the output. Similarly, you 
+can navigate through by clicking on the navigation menu. Also check out http://127.0.0.1:8000/about_us 
+and http://127.0.0.1:8000/contact_us 
+
+
+
